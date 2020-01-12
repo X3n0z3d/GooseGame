@@ -9,7 +9,7 @@ Run "Main" file in IntellJ, or "sbt run" with a terminal in the root folder of t
 
 ## Running the tests
 
-**In IntelliJ:** right click on the project and "run scalatest"
+**In IntelliJ:** right click on the project and "run scalatest" (or run "TestGoose")
 
 **In sbt:** sbt test from the root folder of the project
 

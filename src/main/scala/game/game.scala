@@ -37,42 +37,43 @@ class GooseGame {
       players.put(player, PlayerPosition(players(player).pos, players(player).pos))
       var newPos: Int = players(player).pos + steps
 
-      // If i came from a goose (recursive call)... the output changes!
+      // If i came from a goose (recursive call)... not showind dice roll etc!
       val firstPart: String = if (goose) "" else msg + s"${posOrStart(players(player).lastPos)} to "
 
+      // Effect of the landing box:
       val lastPart: String = newPos match {
-        // The Bridge
-        case 6 =>
-          players.put(player, PlayerPosition(12, players(player).pos))
+        case 6 => // The Bridge
+          movePlayer(player, 12)
           s"The Bridge. $player jumps to 12"
 
-        // Bouncing
-        case n if n > 63 =>
+        case 63 => // Winning box
+          over = true
+          s"63. $player Wins!!"
+
+        case n if n > 63 => // Bouncing
           newPos = 63 - newPos % 63
-          players.put(player, PlayerPosition(newPos, players(player).pos))
+          movePlayer(player, newPos)
           s"63. $player bounces! $player returns to $newPos"
 
-        // The Goose
-        case n if gooseIndex.contains(n) =>
-          players.put(player, PlayerPosition(newPos, players(player).pos))
+        case n if gooseIndex.contains(n) => // The Goose
+          movePlayer(player, newPos)
           val steps = players(player).pos - players(player).lastPos
           s"${players(player).pos}, The Goose. $player moves again and goes to " + move(player, steps, msg, goose = true)
 
-        case other =>
-          players.put(player, PlayerPosition(newPos, players(player).pos))
-          other match {
-            // Winning space
-            case 63 =>
-              over = true
-              s"63. $player Wins!!"
-            // All normal spaces
-            case normal => normal.toString
-          }
+        case normal => // normal spaces without effects
+          movePlayer(player, newPos)
+          normal.toString
       }
+
+      // The resulting string:
       firstPart + lastPart + prank(player, newPos)
     } else {
       s"No player named $player"
     }
+  }
+
+  private def movePlayer(player: String, pos: Int): Unit = {
+    players.put(player, PlayerPosition(pos, players(player).pos))
   }
 
   private def prank(player: String, pos: Int): String = {

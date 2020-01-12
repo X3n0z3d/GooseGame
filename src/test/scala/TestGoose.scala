@@ -52,6 +52,9 @@ class TestGoose extends FunSuite {
 
     gameCli.command("move Pippo 3, 1")
     assert(gameCli.command("move Pippo 1, 1") === "Pippo rolls 1, 1. Pippo moves from 4 to The Bridge. Pippo jumps to 12")
+
+    // Move again, to check that starts from right pos
+    assert(gameCli.command("move Pippo 1, 2") === "Pippo rolls 1, 2. Pippo moves from 12 to 15")
   }
 
   test("the goose") {
