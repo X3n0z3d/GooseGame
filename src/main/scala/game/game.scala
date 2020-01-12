@@ -4,13 +4,7 @@ import scala.util.Random
 
 case class PlayerPosition(pos: Int, lastPos: Int)
 
-object Space extends Enumeration {
-  type Space = Value
-  val Goose, Bridge, Normal, Win = Value
-}
-
 class GooseGame {
-
   // Players and their positions
   private val players = new scala.collection.mutable.HashMap[String, PlayerPosition]()
   private val gooseIndex = Seq(5, 9, 14, 18, 23, 27)
@@ -57,22 +51,24 @@ class GooseGame {
           newPos = 63 - newPos % 63
           players.put(player, PlayerPosition(newPos, players(player).pos))
           s"63. $player bounces! $player returns to $newPos"
+
         // The Goose
         case n if gooseIndex.contains(n) =>
           players.put(player, PlayerPosition(newPos, players(player).pos))
           val steps = players(player).pos - players(player).lastPos
-          s"${players(player).pos}, The Goose. $player moves again and goes to " + move(player, steps, msg, true)
+          s"${players(player).pos}, The Goose. $player moves again and goes to " + move(player, steps, msg, goose = true)
+
         case other =>
           players.put(player, PlayerPosition(newPos, players(player).pos))
           other match {
+            // Winning space
             case 63 =>
               over = true
               s"63. $player Wins!!"
-
+            // All normal spaces
             case normal => normal.toString
           }
-
-    }
+      }
       firstPart + lastPart + prank(player, newPos)
     } else {
       s"No player named $player"
@@ -88,7 +84,7 @@ class GooseGame {
         players.put(otherPlayer, PlayerPosition(myPrev, myPrev))
         s". On $pos there is $otherPlayer, who returns to $myPrev"
       }
-      ).fold("")(_ + "" + _)
+      ).fold("")(_ + _)
   }
 
   private def posOrStart(pos: Int) = if (pos==0) "Start" else pos.toString

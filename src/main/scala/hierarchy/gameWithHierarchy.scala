@@ -1,7 +1,5 @@
 package hierarchy
 
-import hierarchy.Space.Space
-
 import scala.util.Random
 
 case class PlayerPosition(pos: Int, lastPos: Int)
@@ -26,7 +24,7 @@ class GooseGameWithHierarchy {
   object GooseBox extends Box {
     override def effect(player: String, msg: String): String = {
       val steps = players(player).pos-players(player).lastPos
-      s"${players(player).pos}, The Goose. $player moves again and goes to " + move(player, steps, msg, true)
+      s"${players(player).pos}, The Goose. $player moves again and goes to " + move(player, steps, msg, goose = true)
     }
   }
   object WinBox extends Box {
@@ -37,7 +35,7 @@ class GooseGameWithHierarchy {
   }
 
   // Players and their positions
-  private val players = new scala.collection.mutable.HashMap[String, PlayerPosition]();
+  private val players = new scala.collection.mutable.HashMap[String, PlayerPosition]()
   private val gooseIndex = Seq(5, 9, 14, 18, 23, 27)
   // To generate the boxes
   private def spaceFiller(i: Int): Box = i match {
@@ -48,7 +46,7 @@ class GooseGameWithHierarchy {
   }
 
   // Generation of the game's board
-  private val board: Map[Int, Box] =  (for (i <- 0 to 63) yield (i -> spaceFiller(i))).toMap
+  private val board: Map[Int, Box] =  (for (i <- 0 to 63) yield i -> spaceFiller(i)).toMap
 
   var over = false
 
@@ -95,7 +93,7 @@ class GooseGameWithHierarchy {
       if (newPos > 63) {
         newPos = 63 - newPos % 63
         players.put(player, PlayerPosition(newPos, players(player).pos))
-        msg + s"${players(player).lastPos} to 63. $player bounces! $player returns to ${newPos}"
+        msg + s"${players(player).lastPos} to 63. $player bounces! $player returns to $newPos"
       } else {
         // Update current position
         players.put(player, PlayerPosition(newPos, players(player).pos))

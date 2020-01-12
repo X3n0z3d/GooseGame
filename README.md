@@ -19,10 +19,10 @@ I've implemented two version of the game, the first one is **hierarchy version**
 spaces, every space type has an effect, which is called when the player steps on it.
 The second version uses neither map nor spaces types, but only number of boxes. 
 
-The final version of the application uses the second approach, because i think it's a more scala-like solution.
-However both the implementation works and passes the tests.
+The final version of the application uses the second approach, because I think it's a more scala-like solution.
+However both the implementation work and pass the tests. (To use the other version, change the class in GooseCli source file)
 
-**N.B:** there is duplicated code between the "hierarchy" and the "normal" version of the game, i think it was a waste of time to create a generalization 
+**N.B:** there is duplicated code between the "hierarchy" and the "normal" version of the game, I think it was a waste of time to create a generalization 
 to factorize that code. The "hierarchy" version is left in the repo because it is complete and working,
 and it is an alternative way to manage the problem. I think it would have been a shame to delete it.
 
